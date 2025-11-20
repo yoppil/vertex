@@ -10,8 +10,9 @@ import SwiftUI
 @main
 struct vertexApp: App {
     var body: some Scene {
-        WindowGroup {
-            ContentView()
+        MenuBarExtra("Vertex", systemImage: "cpu") {
+            SystemInfoView()
         }
+        .menuBarExtraStyle(.window) // Use .window style for a popover-like view
     }
 }
