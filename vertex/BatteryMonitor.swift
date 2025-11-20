@@ -9,6 +9,7 @@ class BatteryMonitor: ObservableObject {
     @Published var maxCapacity: Double = 0.0
     @Published var cycleCount: Int = 0
     @Published var temperature: Double = 0.0
+    @Published var levelHistory: [Double] = Array(repeating: 0.0, count: 60)
     
     private var timer: Timer?
     
@@ -100,6 +101,11 @@ class BatteryMonitor: ObservableObject {
             self.maxCapacity = health // User requested "Max Capacity: 81.0%", which implies health
             self.cycleCount = cycles
             self.temperature = temp
+            
+            self.levelHistory.append(currentLevel)
+            if self.levelHistory.count > 60 {
+                self.levelHistory.removeFirst()
+            }
         }
     }
 }

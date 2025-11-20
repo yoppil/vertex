@@ -2,162 +2,300 @@ import SwiftUI
 
 struct SystemInfoView: View {
     @StateObject private var vm = SystemMonitorViewModel()
+    @State private var isSettingsOpen = false
+    
+    // Visibility Settings
+    @AppStorage("showCPU") private var showCPU = true
+    @AppStorage("showCPUGraph") private var showCPUGraph = true
+    
+    @AppStorage("showMemory") private var showMemory = true
+    @AppStorage("showMemoryGraph") private var showMemoryGraph = true
+    
+    @AppStorage("showStorage") private var showStorage = true
+    @AppStorage("showStorageGraph") private var showStorageGraph = true
+    
+    @AppStorage("showBattery") private var showBattery = true
+    @AppStorage("showBatteryGraph") private var showBatteryGraph = true
+    
+    @AppStorage("showNetwork") private var showNetwork = true
+    @AppStorage("showNetworkGraph") private var showNetworkGraph = true
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            // CPU
+        VStack(spacing: 0) {
+            // Main Content
             Group {
-                HStack {
-                    Text("CPU：")
-                    Text(String(format: "%.1f%%", vm.cpu.systemUsage + vm.cpu.userUsage))
+                if isSettingsOpen {
+                    SettingsView
+                        .transition(.opacity)
+                } else {
+                    MonitorView
+                        .transition(.opacity)
                 }
-                .font(.headline)
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack {
-                        Text("システム：")
-                        Text(String(format: "%.1f%%", vm.cpu.systemUsage))
-                    }
-                    HStack {
-                        Text("ユーザ：")
-                        Text(String(format: "%.1f%%", vm.cpu.userUsage))
-                    }
-                    HStack {
-                        Text("アイドル状態：")
-                        Text(String(format: "%.1f%%", vm.cpu.idleUsage))
-                    }
-                }
-                .padding(.leading, 16)
-                .font(.system(size: 12))
             }
+            .padding(12)
+            .animation(.easeInOut(duration: 0.2), value: isSettingsOpen)
             
             Divider()
+            
+            // Footer with Settings Button
+            HStack {
+                Spacer()
+                Button(action: {
+                    withAnimation {
+                        isSettingsOpen.toggle()
+                    }
+                }) {
+                    Image(systemName: isSettingsOpen ? "checkmark.circle.fill" : "gearshape.fill")
+                        .font(.system(size: 14))
+                        .foregroundColor(.secondary)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .help(isSettingsOpen ? "設定を閉じる" : "設定を開く")
+            }
+            .padding(.vertical, 8)
+            .padding(.horizontal, 12)
+        }
+        .frame(width: 220)
+    }
+    
+    var SettingsView: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack {
+                Text("表示設定")
+                    .font(.system(size: 13, weight: .bold))
+                Spacer()
+            }
+            .padding(.bottom, 4)
+            
+            VStack(spacing: 12) {
+                ToggleRow(icon: "cpu", title: "CPU", isOn: $showCPU, showGraph: $showCPUGraph)
+                ToggleRow(icon: "memorychip", title: "メモリ", isOn: $showMemory, showGraph: $showMemoryGraph)
+                ToggleRow(icon: "internaldrive", title: "ストレージ", isOn: $showStorage, showGraph: $showStorageGraph)
+                ToggleRow(icon: "battery.100", title: "バッテリー", isOn: $showBattery, showGraph: $showBatteryGraph)
+                ToggleRow(icon: "network", title: "ネットワーク", isOn: $showNetwork, showGraph: $showNetworkGraph)
+            }
+            
+            Spacer()
+        }
+    }
+    
+    var MonitorView: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            // CPU
+            if showCPU {
+                SectionView(
+                    icon: "cpu",
+                    title: "CPU",
+                    value: String(format: "%.1f%%", vm.cpu.systemUsage + vm.cpu.userUsage),
+                    graphData: showCPUGraph ? [vm.cpu.usageHistory] : nil,
+                    graphColors: [.blue],
+                    graphMax: 100
+                ) {
+                    DetailRow(label: "システム", value: String(format: "%.1f%%", vm.cpu.systemUsage))
+                    DetailRow(label: "ユーザ", value: String(format: "%.1f%%", vm.cpu.userUsage))
+                    DetailRow(label: "アイドル", value: String(format: "%.1f%%", vm.cpu.idleUsage))
+                    DetailRow(label: "温度", value: String(format: "%.1f°C", vm.cpu.temperature))
+                }
+                
+                if showMemory || showStorage || showBattery || showNetwork { Divider() }
+            }
             
             // Memory
-            Group {
-                HStack {
-                    Text("メモリ：")
-                    Text(String(format: "%.0f%%", vm.memory.memoryUsagePercentage))
+            if showMemory {
+                SectionView(
+                    icon: "memorychip",
+                    title: "メモリ",
+                    value: String(format: "%.0f%%", vm.memory.memoryUsagePercentage),
+                    graphData: showMemoryGraph ? [vm.memory.usageHistory] : nil,
+                    graphColors: [.purple],
+                    graphMax: 100
+                ) {
+                    DetailRow(label: "プレッシャー", value: String(format: "%.1f%%", vm.memory.memoryPressurePercentage))
+                    DetailRow(label: "アプリ", value: vm.memory.appMemory)
+                    DetailRow(label: "確保", value: vm.memory.wiredMemory)
+                    DetailRow(label: "圧縮", value: vm.memory.compressedMemory)
                 }
-                .font(.headline)
                 
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack {
-                        Text("プレッシャー：")
-                        Text(String(format: "%.1f%%", vm.memory.memoryPressurePercentage))
-                    }
-                    HStack {
-                        Text("アプリメモリ：")
-                        Text(vm.memory.appMemory)
-                    }
-                    HStack {
-                        Text("確保されているメモリ：") // Wired
-                        Text(vm.memory.wiredMemory)
-                    }
-                    HStack {
-                        Text("圧縮：")
-                        Text(vm.memory.compressedMemory)
-                    }
-                }
-                .padding(.leading, 16)
-                .font(.system(size: 12))
+                if showStorage || showBattery || showNetwork { Divider() }
             }
-            
-            Divider()
             
             // Storage
-            Group {
-                HStack {
-                    Text("ストレージ：")
-                    Text(String(format: "%.1f%%", vm.storage.usagePercentage))
+            if showStorage {
+                SectionView(
+                    icon: "internaldrive",
+                    title: "ストレージ",
+                    value: String(format: "%.1f%%", vm.storage.usagePercentage),
+                    graphData: showStorageGraph ? [vm.storage.readHistory, vm.storage.writeHistory] : nil,
+                    graphColors: [.cyan, .red],
+                    graphMax: nil
+                ) {
+                    Text("\(vm.storage.usedSpace) / \(vm.storage.totalSpace)")
+                        .font(.system(size: 9))
+                        .foregroundColor(.secondary)
+                    
+                    HStack(spacing: 8) {
+                        HStack(spacing: 2) {
+                            Image(systemName: "arrow.down.circle.fill").font(.system(size: 8)).foregroundColor(.cyan)
+                            Text(vm.storage.readSpeed).font(.system(size: 9))
+                        }
+                        HStack(spacing: 2) {
+                            Image(systemName: "arrow.up.circle.fill").font(.system(size: 8)).foregroundColor(.red)
+                            Text(vm.storage.writeSpeed).font(.system(size: 9))
+                        }
+                    }
                 }
-                .font(.headline)
                 
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("\(vm.storage.usedSpace)/\(vm.storage.totalSpace)")
-                    HStack {
-                        Text("Read：")
-                        Text(vm.storage.readSpeed)
-                    }
-                    HStack {
-                        Text("Write：")
-                        Text(vm.storage.writeSpeed)
-                    }
-                }
-                .padding(.leading, 16)
-                .font(.system(size: 12))
+                if showBattery || showNetwork { Divider() }
             }
-            
-            Divider()
             
             // Battery
-            Group {
-                HStack {
-                    Text("バッテリー：")
-                    Text(String(format: "%.1f%%", vm.battery.batteryLevel))
+            if showBattery {
+                SectionView(
+                    icon: "battery.100",
+                    title: "バッテリー",
+                    value: String(format: "%.1f%%", vm.battery.batteryLevel),
+                    graphData: showBatteryGraph ? [vm.battery.levelHistory] : nil,
+                    graphColors: [.green],
+                    graphMax: 100
+                ) {
+                    DetailRow(label: "供給源", value: vm.battery.powerSource)
+                    DetailRow(label: "最大容量", value: String(format: "%.1f%%", vm.battery.maxCapacity))
+                    DetailRow(label: "充放電回数", value: "\(vm.battery.cycleCount)")
+                    DetailRow(label: "温度", value: String(format: "%.1f°C", vm.battery.temperature))
                 }
-                .font(.headline)
                 
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack {
-                        Text("供給源：")
-                        Text(vm.battery.powerSource)
-                    }
-                    HStack {
-                        Text("最大容量：")
-                        Text(String(format: "%.1f%%", vm.battery.maxCapacity))
-                    }
-                    HStack {
-                        Text("充放電回数：")
-                        Text("\(vm.battery.cycleCount)")
-                    }
-                    HStack {
-                        Text("温度：")
-                        Text(String(format: "%.1f°C", vm.battery.temperature))
-                    }
-                }
-                .padding(.leading, 16)
-                .font(.system(size: 12))
+                if showNetwork { Divider() }
             }
-            
-            Divider()
             
             // Network
-            Group {
-                HStack {
-                    Text("ネットワーク：")
-                    Text(vm.network.interfaceName)
+            if showNetwork {
+                SectionView(
+                    icon: "network",
+                    title: "ネットワーク",
+                    value: vm.network.interfaceName,
+                    graphData: showNetworkGraph ? [vm.network.downloadHistory, vm.network.uploadHistory] : nil,
+                    graphColors: [.cyan, .red],
+                    graphMax: nil
+                ) {
+                    DetailRow(label: "IP", value: vm.network.localIP)
+                    HStack(spacing: 8) {
+                        HStack(spacing: 2) {
+                            Image(systemName: "arrow.down.circle.fill").font(.system(size: 8)).foregroundColor(.cyan)
+                            Text(vm.network.downloadSpeed).font(.system(size: 9))
+                        }
+                        HStack(spacing: 2) {
+                            Image(systemName: "arrow.up.circle.fill").font(.system(size: 8)).foregroundColor(.red)
+                            Text(vm.network.uploadSpeed).font(.system(size: 9))
+                        }
+                    }
                 }
-                .font(.headline)
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack {
-                        Text("ローカルIP：")
-                        Text(vm.network.localIP)
-                    }
-                    HStack {
-                        Text("アップロード：")
-                        Text(vm.network.uploadSpeed)
-                    }
-                    HStack {
-                        Text("ダウンロード：")
-                        Text(vm.network.downloadSpeed)
-                    }
-                }
-                .padding(.leading, 16)
-                .font(.system(size: 12))
             }
-            
-            Divider()
-            
-            Button("Quit Vertex") {
-                NSApplication.shared.terminate(nil)
-            }
-            .keyboardShortcut("q")
-            .padding(.top, 4)
         }
-        .padding()
-        .frame(width: 280)
+    }
+}
+
+// MARK: - Helper Views
+
+struct SectionView<Content: View>: View {
+    let icon: String
+    let title: String
+    let value: String
+    let graphData: [[Double]]?
+    let graphColors: [Color]
+    let graphMax: Double?
+    let content: Content
+    
+    init(icon: String, title: String, value: String, graphData: [[Double]]? = nil, graphColors: [Color] = [], graphMax: Double? = nil, @ViewBuilder content: () -> Content) {
+        self.icon = icon
+        self.title = title
+        self.value = value
+        self.graphData = graphData
+        self.graphColors = graphColors
+        self.graphMax = graphMax
+        self.content = content()
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack(spacing: 4) {
+                Image(systemName: icon)
+                    .font(.system(size: 10))
+                    .foregroundColor(.secondary)
+                Text(title)
+                    .font(.system(size: 11, weight: .bold))
+                Spacer()
+                Text(value)
+                    .font(.system(size: 11, weight: .medium))
+                    .monospacedDigit()
+            }
+            
+            if let data = graphData {
+                GraphView(data: data, colors: graphColors, minRange: 0, maxRange: graphMax)
+                    .frame(height: 30)
+                    .padding(.vertical, 2)
+            }
+            
+            VStack(alignment: .leading, spacing: 2) {
+                content
+            }
+            .padding(.leading, 2) // Reduced indentation for cleaner look
+        }
+    }
+}
+
+struct DetailRow: View {
+    let label: String
+    let value: String
+    
+    var body: some View {
+        HStack(spacing: 4) {
+            Text(label + "：")
+                .foregroundColor(.secondary)
+            Text(value)
+                .foregroundColor(.primary)
+        }
+        .font(.system(size: 9))
+    }
+}
+
+struct ToggleRow: View {
+    let icon: String
+    let title: String
+    @Binding var isOn: Bool
+    @Binding var showGraph: Bool
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Image(systemName: icon)
+                    .frame(width: 16)
+                    .font(.system(size: 12))
+                    .foregroundColor(.secondary)
+                
+                Text(title)
+                    .font(.system(size: 12, weight: .medium))
+                
+                Spacer()
+                
+                Toggle("", isOn: $isOn)
+                    .toggleStyle(.switch)
+                    .controlSize(.mini)
+                    .labelsHidden()
+            }
+            
+            if isOn {
+                HStack {
+                    Spacer().frame(width: 24) // Indent
+                    Toggle(isOn: $showGraph) {
+                        Text("グラフを表示")
+                            .font(.system(size: 10))
+                            .foregroundColor(.secondary)
+                    }
+                    .toggleStyle(.checkbox)
+                }
+            }
+        }
     }
 }
 

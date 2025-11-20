@@ -8,6 +8,7 @@ class MemoryMonitor: ObservableObject {
     @Published var appMemory: String = ""
     @Published var wiredMemory: String = ""
     @Published var compressedMemory: String = ""
+    @Published var usageHistory: [Double] = Array(repeating: 0.0, count: 300)
     
     private var timer: Timer?
     private let pageSize = Double(vm_kernel_page_size)
@@ -91,6 +92,11 @@ class MemoryMonitor: ObservableObject {
             self.appMemory = self.formatBytes(appMem)
             self.wiredMemory = self.formatBytes(wiredMem)
             self.compressedMemory = self.formatBytes(compressedMem)
+            
+            self.usageHistory.append(min(usagePercentage, 100.0))
+            if self.usageHistory.count > 300 {
+                self.usageHistory.removeFirst()
+            }
         }
     }
     

@@ -7,6 +7,8 @@ class NetworkMonitor: ObservableObject {
     @Published var localIP: String = "Unknown"
     @Published var uploadSpeed: String = "0.0 KB/s"
     @Published var downloadSpeed: String = "0.0 KB/s"
+    @Published var uploadHistory: [Double] = Array(repeating: 0.0, count: 300)
+    @Published var downloadHistory: [Double] = Array(repeating: 0.0, count: 300)
     
     private var monitor: NWPathMonitor?
     private var timer: Timer?
@@ -148,6 +150,16 @@ class NetworkMonitor: ObservableObject {
                     DispatchQueue.main.async {
                         self.downloadSpeed = self.formatSpeed(downSpeed)
                         self.uploadSpeed = self.formatSpeed(upSpeed)
+                        
+                        self.downloadHistory.append(downSpeed)
+                        if self.downloadHistory.count > 300 {
+                            self.downloadHistory.removeFirst()
+                        }
+                        
+                        self.uploadHistory.append(upSpeed)
+                        if self.uploadHistory.count > 300 {
+                            self.uploadHistory.removeFirst()
+                        }
                     }
                 }
             }

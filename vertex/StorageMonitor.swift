@@ -9,6 +9,8 @@ class StorageMonitor: ObservableObject {
     @Published var totalSpace: String = ""
     @Published var readSpeed: String = "0.0 MB/s"
     @Published var writeSpeed: String = "0.0 MB/s"
+    @Published var readHistory: [Double] = Array(repeating: 0.0, count: 300)
+    @Published var writeHistory: [Double] = Array(repeating: 0.0, count: 300)
     
     private var timer: Timer?
     private var previousReadBytes: UInt64 = 0
@@ -109,6 +111,16 @@ class StorageMonitor: ObservableObject {
                     DispatchQueue.main.async {
                         self.readSpeed = self.formatSpeed(readSpeedVal)
                         self.writeSpeed = self.formatSpeed(writeSpeedVal)
+                        
+                        self.readHistory.append(readSpeedVal)
+                        if self.readHistory.count > 300 {
+                            self.readHistory.removeFirst()
+                        }
+                        
+                        self.writeHistory.append(writeSpeedVal)
+                        if self.writeHistory.count > 300 {
+                            self.writeHistory.removeFirst()
+                        }
                     }
                 }
             }
