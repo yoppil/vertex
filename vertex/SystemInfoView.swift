@@ -20,6 +20,9 @@ struct SystemInfoView: View {
     @AppStorage("showNetwork") private var showNetwork = true
     @AppStorage("showNetworkGraph") private var showNetworkGraph = true
     
+    @AppStorage("showFan") private var showFan = true
+    @AppStorage("syncFans") private var syncFans = false
+    
     var body: some View {
         VStack(spacing: 0) {
             // Main Content
@@ -74,6 +77,7 @@ struct SystemInfoView: View {
                 ToggleRow(icon: "internaldrive", title: "ストレージ", isOn: $showStorage, showGraph: $showStorageGraph)
                 ToggleRow(icon: "battery.100", title: "バッテリー", isOn: $showBattery, showGraph: $showBatteryGraph)
                 ToggleRow(icon: "network", title: "ネットワーク", isOn: $showNetwork, showGraph: $showNetworkGraph)
+                ToggleRow(icon: "fanblades", title: "ファン", isOn: $showFan, showGraph: .constant(false))
             }
             
             Spacer()
@@ -188,6 +192,73 @@ struct SystemInfoView: View {
                             Image(systemName: "arrow.up.circle.fill").font(.system(size: 8)).foregroundColor(.red)
                             Text(vm.network.uploadSpeed).font(.system(size: 9))
                         }
+                    }
+                }
+            }
+            
+            // Fans
+            if showFan && !vm.fan.fans.isEmpty {
+                if showNetwork || showBattery || showStorage || showMemory || showCPU { Divider() }
+                
+                SectionView(
+                    icon: "fanblades",
+                    title: "ファン",
+                    value: "\(vm.fan.fans.count)基",
+                    graphData: nil,
+                    graphColors: [],
+                    graphMax: nil
+                ) {
+                    // Sync Toggle
+                    if vm.fan.fans.count > 1 {
+                        HStack {
+                            Spacer()
+                            Toggle("全ファン同期", isOn: $syncFans)
+                                .toggleStyle(.checkbox)
+                                .font(.system(size: 9))
+                                .controlSize(.mini)
+                        }
+                        .padding(.bottom, 4)
+                    }
+                    
+                    ForEach($vm.fan.fans) { $fan in
+                        VStack(alignment: .leading, spacing: 4) {
+                            HStack {
+                                Text(fan.name)
+                                    .font(.system(size: 9))
+                                    .foregroundColor(.secondary)
+                                Spacer()
+                                Text("\(Int(fan.currentRPM)) RPM")
+                                    .font(.system(size: 9))
+                                    .monospacedDigit()
+                            }
+                            
+                            HStack(spacing: 8) {
+                                Slider(value: $fan.targetRPM, in: fan.minRPM...fan.maxRPM, step: 100) {
+                                    Text("Speed")
+                                } minimumValueLabel: {
+                                    Text("\(Int(fan.minRPM))")
+                                        .font(.system(size: 8))
+                                        .foregroundColor(.secondary)
+                                } maximumValueLabel: {
+                                    Text("\(Int(fan.maxRPM))")
+                                        .font(.system(size: 8))
+                                        .foregroundColor(.secondary)
+                                } onEditingChanged: { editing in
+                                    if !editing {
+                                        if syncFans {
+                                            // Update all fans to this target
+                                            for f in vm.fan.fans {
+                                                vm.fan.setFanSpeed(index: f.id, rpm: fan.targetRPM)
+                                            }
+                                        } else {
+                                            vm.fan.setFanSpeed(index: fan.id, rpm: fan.targetRPM)
+                                        }
+                                    }
+                                }
+                                .controlSize(.mini)
+                            }
+                        }
+                        .padding(.bottom, 4)
                     }
                 }
             }

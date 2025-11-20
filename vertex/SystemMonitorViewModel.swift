@@ -7,6 +7,7 @@ class SystemMonitorViewModel: ObservableObject {
     @Published var storage = StorageMonitor()
     @Published var battery = BatteryMonitor()
     @Published var network = NetworkMonitor()
+    @Published var fan = FanMonitor()
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -17,5 +18,6 @@ class SystemMonitorViewModel: ObservableObject {
         storage.objectWillChange.sink { [weak self] _ in self?.objectWillChange.send() }.store(in: &cancellables)
         battery.objectWillChange.sink { [weak self] _ in self?.objectWillChange.send() }.store(in: &cancellables)
         network.objectWillChange.sink { [weak self] _ in self?.objectWillChange.send() }.store(in: &cancellables)
+        fan.objectWillChange.sink { [weak self] _ in self?.objectWillChange.send() }.store(in: &cancellables)
     }
 }

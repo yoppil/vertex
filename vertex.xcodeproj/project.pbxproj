@@ -6,20 +6,134 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		F2F706882ECF7C6700E27E4D /* com.yoppii.vertex.helper.xpc in CopyFiles */ = {isa = PBXBuildFile; fileRef = F2F706642ECF67D200E27E4D /* com.yoppii.vertex.helper.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		F2F706812ECF70D300E27E4D /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/Library/LaunchDaemons;
+			dstSubfolderSpec = 1;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F2F706842ECF71CC00E27E4D /* Copy Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/Library/LaunchDaemons;
+			dstSubfolderSpec = 1;
+			files = (
+			);
+			name = "Copy Files";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F2F706872ECF7C4300E27E4D /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/Library/LaunchServices;
+			dstSubfolderSpec = 1;
+			files = (
+				F2F706882ECF7C6700E27E4D /* com.yoppii.vertex.helper.xpc in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		F2F705992ECEDA9400E27E4D /* vertex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vertex.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F2F706642ECF67D200E27E4D /* com.yoppii.vertex.helper.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = com.yoppii.vertex.helper.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		F2F7065F2ECF5E3B00E27E4D /* Exceptions for "vertex" folder in "vertex" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				PrivilegedHelper/main.swift,
+			);
+			target = F2F705982ECEDA9400E27E4D /* vertex */;
+		};
+		F2F706732ECF67D200E27E4D /* Exceptions for "com.yoppii.vertex.helper" folder in "com.yoppii.vertex.helper" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = F2F706632ECF67D200E27E4D /* com.yoppii.vertex.helper */;
+		};
+		F2F706762ECF68B100E27E4D /* Exceptions for "vertex" folder in "com.yoppii.vertex.helper" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				PrivilegedHelper/com.yoppii.vertex.helper.plist,
+				PrivilegedHelper/HelperProtocol.swift,
+				PrivilegedHelper/main.swift,
+				PrivilegedHelper/VertexHelper.swift,
+				SMCKit.swift,
+			);
+			target = F2F706632ECF67D200E27E4D /* com.yoppii.vertex.helper */;
+		};
+		F2F7067D2ECF6C0C00E27E4D /* Exceptions for "com.yoppii.vertex.helper" folder in "vertex" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = F2F705982ECEDA9400E27E4D /* vertex */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		F2F706832ECF70FF00E27E4D /* Exceptions for "vertex" folder in "Copy Files" phase from "com.yoppii.vertex.helper" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			attributesByRelativePath = {
+				PrivilegedHelper/com.yoppii.vertex.helper.plist = (CodeSignOnCopy, );
+			};
+			buildPhase = F2F706812ECF70D300E27E4D /* CopyFiles */;
+			membershipExceptions = (
+				PrivilegedHelper/com.yoppii.vertex.helper.plist,
+			);
+		};
+		F2F706862ECF71E900E27E4D /* Exceptions for "vertex" folder in "Copy Files" phase from "vertex" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = F2F706842ECF71CC00E27E4D /* Copy Files */;
+			membershipExceptions = (
+				PrivilegedHelper/com.yoppii.vertex.helper.plist,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		F2F7059B2ECEDA9400E27E4D /* vertex */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				F2F7065F2ECF5E3B00E27E4D /* Exceptions for "vertex" folder in "vertex" target */,
+				F2F706862ECF71E900E27E4D /* Exceptions for "vertex" folder in "Copy Files" phase from "vertex" target */,
+				F2F706762ECF68B100E27E4D /* Exceptions for "vertex" folder in "com.yoppii.vertex.helper" target */,
+				F2F706832ECF70FF00E27E4D /* Exceptions for "vertex" folder in "Copy Files" phase from "com.yoppii.vertex.helper" target */,
+			);
 			path = vertex;
+			sourceTree = "<group>";
+		};
+		F2F706652ECF67D200E27E4D /* com.yoppii.vertex.helper */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				F2F7067D2ECF6C0C00E27E4D /* Exceptions for "com.yoppii.vertex.helper" folder in "vertex" target */,
+				F2F706732ECF67D200E27E4D /* Exceptions for "com.yoppii.vertex.helper" folder in "com.yoppii.vertex.helper" target */,
+			);
+			path = com.yoppii.vertex.helper;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		F2F705962ECEDA9400E27E4D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F2F706612ECF67D200E27E4D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -33,6 +147,7 @@
 			isa = PBXGroup;
 			children = (
 				F2F7059B2ECEDA9400E27E4D /* vertex */,
+				F2F706652ECF67D200E27E4D /* com.yoppii.vertex.helper */,
 				F2F7059A2ECEDA9400E27E4D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +156,7 @@
 			isa = PBXGroup;
 			children = (
 				F2F705992ECEDA9400E27E4D /* vertex.app */,
+				F2F706642ECF67D200E27E4D /* com.yoppii.vertex.helper.xpc */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -55,6 +171,8 @@
 				F2F705952ECEDA9400E27E4D /* Sources */,
 				F2F705962ECEDA9400E27E4D /* Frameworks */,
 				F2F705972ECEDA9400E27E4D /* Resources */,
+				F2F706842ECF71CC00E27E4D /* Copy Files */,
+				F2F706872ECF7C4300E27E4D /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -70,6 +188,29 @@
 			productReference = F2F705992ECEDA9400E27E4D /* vertex.app */;
 			productType = "com.apple.product-type.application";
 		};
+		F2F706632ECF67D200E27E4D /* com.yoppii.vertex.helper */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F2F706702ECF67D200E27E4D /* Build configuration list for PBXNativeTarget "com.yoppii.vertex.helper" */;
+			buildPhases = (
+				F2F706602ECF67D200E27E4D /* Sources */,
+				F2F706612ECF67D200E27E4D /* Frameworks */,
+				F2F706622ECF67D200E27E4D /* Resources */,
+				F2F706812ECF70D300E27E4D /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				F2F706652ECF67D200E27E4D /* com.yoppii.vertex.helper */,
+			);
+			name = com.yoppii.vertex.helper;
+			packageProductDependencies = (
+			);
+			productName = com.yoppii.vertex.helper;
+			productReference = F2F706642ECF67D200E27E4D /* com.yoppii.vertex.helper.xpc */;
+			productType = "com.apple.product-type.xpc-service";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -81,6 +222,9 @@
 				LastUpgradeCheck = 2610;
 				TargetAttributes = {
 					F2F705982ECEDA9400E27E4D = {
+						CreatedOnToolsVersion = 26.1.1;
+					};
+					F2F706632ECF67D200E27E4D = {
 						CreatedOnToolsVersion = 26.1.1;
 					};
 				};
@@ -100,6 +244,7 @@
 			projectRoot = "";
 			targets = (
 				F2F705982ECEDA9400E27E4D /* vertex */,
+				F2F706632ECF67D200E27E4D /* com.yoppii.vertex.helper */,
 			);
 		};
 /* End PBXProject section */
@@ -112,10 +257,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F2F706622ECF67D200E27E4D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		F2F705952ECEDA9400E27E4D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F2F706602ECF67D200E27E4D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -251,6 +410,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = X9KXKT3J2M;
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -281,6 +441,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = X9KXKT3J2M;
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -297,6 +458,56 @@
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		F2F706712ECF67D200E27E4D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = X9KXKT3J2M;
+				ENABLE_APP_SANDBOX = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = com.yoppii.vertex.helper/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = com.yoppii.vertex.helper;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "yoppii.com-yoppii-vertex-helper";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		F2F706722ECF67D200E27E4D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = X9KXKT3J2M;
+				ENABLE_APP_SANDBOX = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = com.yoppii.vertex.helper/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = com.yoppii.vertex.helper;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "yoppii.com-yoppii-vertex-helper";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
@@ -320,6 +531,15 @@
 			buildConfigurations = (
 				F2F705A52ECEDA9500E27E4D /* Debug */,
 				F2F705A62ECEDA9500E27E4D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F2F706702ECF67D200E27E4D /* Build configuration list for PBXNativeTarget "com.yoppii.vertex.helper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F2F706712ECF67D200E27E4D /* Debug */,
+				F2F706722ECF67D200E27E4D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
