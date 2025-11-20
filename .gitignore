@@ -1,0 +1,20 @@
+# Xcode
+.DS_Store
+*/build/
+*.derivedData
+*.hmap
+*.ipa
+*.xcuserstate
+project.xcworkspace/
+xcuserdata/
+*.xccheckout
+*.moved-aside
+*.xccheckout
+*.xcscmblueprint
+
+# Swift Package Manager
+.build/
+
+# Other
+*.swp
+*~
