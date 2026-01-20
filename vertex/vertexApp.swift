@@ -9,10 +9,14 @@ import SwiftUI
 
 @main
 struct vertexApp: App {
+    @StateObject private var battery = BatteryMonitor()
+    
     var body: some Scene {
-        MenuBarExtra("Vertex", systemImage: "cpu") {
+        MenuBarExtra {
             SystemInfoView()
+        } label: {
+            Text("\(battery.adapterWattage)W")
         }
-        .menuBarExtraStyle(.window) // Use .window style for a popover-like view
+        .menuBarExtraStyle(.window)
     }
 }
