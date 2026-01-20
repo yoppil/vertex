@@ -3,6 +3,7 @@ import Combine
 
 class SystemMonitorViewModel: ObservableObject {
     @Published var cpu = CPUMonitor()
+    @Published var gpu = GPUMonitor()
     @Published var memory = MemoryMonitor()
     @Published var storage = StorageMonitor()
     @Published var battery = BatteryMonitor()
@@ -13,6 +14,7 @@ class SystemMonitorViewModel: ObservableObject {
     init() {
         // Forward objectWillChange from children to self
         cpu.objectWillChange.sink { [weak self] _ in self?.objectWillChange.send() }.store(in: &cancellables)
+        gpu.objectWillChange.sink { [weak self] _ in self?.objectWillChange.send() }.store(in: &cancellables)
         memory.objectWillChange.sink { [weak self] _ in self?.objectWillChange.send() }.store(in: &cancellables)
         storage.objectWillChange.sink { [weak self] _ in self?.objectWillChange.send() }.store(in: &cancellables)
         battery.objectWillChange.sink { [weak self] _ in self?.objectWillChange.send() }.store(in: &cancellables)

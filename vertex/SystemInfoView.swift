@@ -7,6 +7,9 @@ struct SystemInfoView: View {
     // Visibility Settings
     @AppStorage("showCPU") private var showCPU = true
     @AppStorage("showCPUGraph") private var showCPUGraph = true
+
+    @AppStorage("showGPU") private var showGPU = true
+    @AppStorage("showGPUGraph") private var showGPUGraph = true
     
     @AppStorage("showMemory") private var showMemory = true
     @AppStorage("showMemoryGraph") private var showMemoryGraph = true
@@ -70,6 +73,7 @@ struct SystemInfoView: View {
             
             VStack(spacing: 12) {
                 ToggleRow(icon: "cpu", title: "CPU", isOn: $showCPU, showGraph: $showCPUGraph)
+                ToggleRow(icon: "cpu.fill", title: "GPU", isOn: $showGPU, showGraph: $showGPUGraph)
                 ToggleRow(icon: "memorychip", title: "メモリ", isOn: $showMemory, showGraph: $showMemoryGraph)
                 ToggleRow(icon: "internaldrive", title: "ストレージ", isOn: $showStorage, showGraph: $showStorageGraph)
                 ToggleRow(icon: "battery.100", title: "バッテリー", isOn: $showBattery, showGraph: $showBatteryGraph)
@@ -96,6 +100,28 @@ struct SystemInfoView: View {
                     DetailRow(label: "ユーザ", value: String(format: "%.1f%%", vm.cpu.userUsage))
                     DetailRow(label: "アイドル", value: String(format: "%.1f%%", vm.cpu.idleUsage))
                     DetailRow(label: "温度", value: String(format: "%.1f°C", vm.cpu.temperature))
+                }
+                
+                if showMemory || showGPU || showStorage || showBattery || showNetwork { Divider() }
+            }
+
+            // GPU
+            if showGPU {
+                SectionView(
+                    icon: "cpu.fill",
+                    title: "GPU",
+                    value: String(format: "%.1f%%", vm.gpu.gpuUsage),
+                    graphData: showGPUGraph ? [vm.gpu.usageHistory] : nil,
+                    graphColors: [.orange],
+                    graphMax: 100
+                ) {
+                    DetailRow(label: "メモリ", value: ByteCountFormatter.string(fromByteCount: vm.gpu.memoryUsage, countStyle: .memory))
+                    if vm.gpu.powerUsage > 0 {
+                        DetailRow(label: "電力", value: String(format: "%.1fW", vm.gpu.powerUsage))
+                    }
+                    if vm.gpu.temperature > 0 {
+                        DetailRow(label: "温度", value: String(format: "%.1f°C", vm.gpu.temperature))
+                    }
                 }
                 
                 if showMemory || showStorage || showBattery || showNetwork { Divider() }
@@ -160,6 +186,9 @@ struct SystemInfoView: View {
                     graphMax: 100
                 ) {
                     DetailRow(label: "供給源", value: vm.battery.powerSource)
+                    if vm.battery.adapterWattage > 0 {
+                        DetailRow(label: "アダプター", value: "\(vm.battery.adapterWattage)W")
+                    }
                     DetailRow(label: "最大容量", value: String(format: "%.1f%%", vm.battery.maxCapacity))
                     DetailRow(label: "充放電回数", value: "\(vm.battery.cycleCount)")
                     DetailRow(label: "温度", value: String(format: "%.1f°C", vm.battery.temperature))
